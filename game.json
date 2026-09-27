@@ -1,8 +1,15 @@
 {
+  "$schema": "https://raw.githubusercontent.com/pewplay/pewplay/main/schema/game.schema.json",
   "title": "Rock Paper Scissors",
   "description": "Play the classic Rock Paper Scissors game against the computer.",
-  "keywords": ["rock", "paper", "scissors", "arcade", "casual"],
   "category": "Casual",
+  "tags": [
+    "rock",
+    "paper",
+    "scissors",
+    "arcade",
+    "casual"
+  ],
   "author": "PewPlay",
   "playMode": "SinglePlayer"
 }
