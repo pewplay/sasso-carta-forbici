@@ -62,7 +62,7 @@ function gamePlayerSelect(){
 	rules.addEventListener("click", function(){
 		showRules(move_selector);
 	});
-	rules.innerText = 'REGOLE';
+	rules.innerText = 'RULES';
 	move_selector.appendChild(rules);
 }
 
@@ -84,11 +84,12 @@ function showRules(){
 
 	let rulesHead = document.createElement('div');
 	rulesHead.className = 'rules_head';
-	rulesHead.innerText = 'REGOLE';
+	rulesHead.innerText = 'RULES';
 	rulesBlock.appendChild(rulesHead);
 	
 	let rulesImage = document.createElement('img');
 	rulesImage.src = './assets/images/image-rules.svg';
+	rulesImage.alt = 'Rules: paper beats rock, rock beats scissors, scissors beats paper';
 	rulesBlock.appendChild(rulesImage);	
 	
 	move_selector.appendChild(rulesBlock);
@@ -105,7 +106,7 @@ function iconSelect(type){
 	
 	let ppt = document.createElement('span');
 	ppt.id = 'player_pick_txt';
-	ppt.innerText = 'HAI SCELTO';
+	ppt.innerText = 'YOU PICKED';
 	move_selector.appendChild(ppt);
 
 	let houseEmpty = document.createElement('div');
@@ -114,7 +115,7 @@ function iconSelect(type){
 	
 	let hpt = document.createElement('span');
 	hpt.id = 'house_pick_txt';
-	hpt.innerText = 'SCELTA DELLA CASA';
+	hpt.innerText = 'THE HOUSE PICKED';
 	move_selector.appendChild(hpt);
 
 	if(joinTop){
@@ -227,7 +228,7 @@ function selectionRoll(p, r, s, type){
 function showResult(type){
 	score = (type == 'w')? score + 1 : ((type == 'l' && score != 0)? score - 1 : score);
 	document.getElementById('score').innerText = score;
-	let msg = (type == 'w')? 'HAI VINTO' : ((type == 'l')? 'HAI PERSO' : 'PAREGGIO');
+	let msg = (type == 'w')? 'YOU WIN' : ((type == 'l')? 'YOU LOSE' : 'DRAW');
 	let resultBlock = document.createElement('div');
 	resultBlock.className = 'result_block';
 
@@ -240,7 +241,7 @@ function showResult(type){
 	extraSpace.className = 'extra_space';
 	let btnPlayAgain = document.createElement('span');
 	btnPlayAgain.className = 'btn_play_again';
-	btnPlayAgain.innerText = 'GIOCO DI NUOVO';
+	btnPlayAgain.innerText = 'PLAY AGAIN';
 	btnPlayAgain.addEventListener("click", function(){
 		gamePlayerSelect();
 	});
