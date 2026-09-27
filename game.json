@@ -1,8 +1,61 @@
 {
+  "$schema": "https://raw.githubusercontent.com/pewplay/pewplay/main/schema/game.schema.json",
   "title": "Rock Paper Scissors",
-  "description": "Play the classic Rock Paper Scissors game against the computer.",
-  "keywords": ["rock", "paper", "scissors", "arcade", "casual"],
+  "description": "Pick rock, paper or scissors and see if you can beat the house's random choice to build up your score. Free and quick to play in your browser.",
+  "about": "Rock Paper Scissors brings the playground classic to your screen with big, colorful buttons and smooth animations. You make your pick, the house reveals its own choice a moment later, and the winner is highlighted with a glowing ring.\n\nEvery win adds a point to your score and every loss takes one away, while a draw leaves it unchanged. The house chooses completely at random, so there is no pattern to exploit, just luck and nerve as you try to push your streak higher.\n\nIt is a relaxed game for anyone with a spare minute, easy enough for kids and quick enough to settle a friendly bet. A Rules button is always there if you need a reminder of what beats what.",
+  "howToPlay": "Click or tap rock, paper or scissors to make your move. The house then picks at random: paper beats rock, rock beats scissors and scissors beats paper. Win to gain a point, lose to drop one, and press Play Again for the next round.",
+  "controls": [
+    {
+      "input": "Click / Tap",
+      "action": "Choose rock, paper or scissors"
+    },
+    {
+      "input": "Click / Tap Play Again",
+      "action": "Start the next round"
+    },
+    {
+      "input": "Click / Tap Rules",
+      "action": "Show which move beats which"
+    }
+  ],
+  "tips": [
+    "The house picks completely at random, so no move is better than another in the long run.",
+    "Your score never drops below zero, so an early loss costs you nothing.",
+    "Set yourself a target, like reaching 10 points, to turn a random game into a real challenge.",
+    "Open the Rules panel if you ever forget which hand beats which."
+  ],
+  "faq": [
+    {
+      "question": "Is Rock Paper Scissors free to play?",
+      "answer": "Yes. It is completely free and runs in your browser with no download or sign-up."
+    },
+    {
+      "question": "Can I play on a phone or tablet?",
+      "answer": "Yes. The layout adapts to small screens and you simply tap the move you want."
+    },
+    {
+      "question": "Does the house cheat?",
+      "answer": "No. The house makes its choice at random before you pick, so every round is a fair game of chance. Your score resets when you reload the page."
+    }
+  ],
   "category": "Casual",
+  "tags": [
+    "rock paper scissors",
+    "hand game",
+    "chance",
+    "casual",
+    "quick game"
+  ],
   "author": "PewPlay",
-  "playMode": "SinglePlayer"
+  "playMode": "SinglePlayer",
+  "orientation": "any",
+  "cover": "cover.png",
+  "screenshots": [
+    "screenshots/1.png",
+    "screenshots/2.png",
+    "screenshots/3.png"
+  ],
+  "exclude": [
+    "/assets/images/image-rules-bonus.svg"
+  ]
 }
