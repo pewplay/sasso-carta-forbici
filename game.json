@@ -1,28 +1,32 @@
 {
   "$schema": "https://raw.githubusercontent.com/pewplay/pewplay/main/schema/game.schema.json",
   "title": "Rock Paper Scissors",
-  "description": "Pick rock, paper or scissors and see if you can beat the house's random choice to build up your score. Free and quick to play in your browser.",
-  "about": "Rock Paper Scissors brings the playground classic to your screen with big, colorful buttons and smooth animations. You make your pick, the house reveals its own choice a moment later, and the winner is highlighted with a glowing ring.\n\nEvery win adds a point to your score and every loss takes one away, while a draw leaves it unchanged. The house chooses completely at random, so there is no pattern to exploit, just luck and nerve as you try to push your streak higher.\n\nIt is a relaxed game for anyone with a spare minute, easy enough for kids and quick enough to settle a friendly bet. A Rules button is always there if you need a reminder of what beats what.",
-  "howToPlay": "Click or tap rock, paper or scissors to make your move. The house then picks at random: paper beats rock, rock beats scissors and scissors beats paper. Win to gain a point, lose to drop one, and press Play Again for the next round.",
+  "description": "Pick rock, paper or scissors, beat the house's random choice and build your score and win streak. Free and quick to play in your browser.",
+  "about": "Rock Paper Scissors brings the playground classic to your screen with big, colorful tokens and smooth animations. You make your pick, the house shuffles and reveals its own choice a moment later, and the winner is highlighted with a glowing ring.\n\nEvery win adds a point to your score and every loss takes one away, while a draw leaves it unchanged. Below the score you can follow your wins, losses, draws, current win streak and best streak, and everything is saved on your device so you can pick up where you left off. The house chooses completely at random, so there is no pattern to exploit, just luck and nerve as you try to push your streak higher.\n\nIt is a relaxed game for anyone with a spare minute, easy enough for kids and quick enough to settle a friendly bet. A Rules button is always there if you need a reminder of what beats what.",
+  "howToPlay": "Click or tap rock, paper or scissors to make your move, or press R, P or S on the keyboard. The house then reveals its pick: paper beats rock, rock beats scissors and scissors beats paper. Win to gain a point, lose to drop one (never below zero), and press Play Again or Enter for the next round.",
   "controls": [
     {
-      "input": "Click / Tap",
+      "input": "Click / Tap a token",
       "action": "Choose rock, paper or scissors"
     },
     {
-      "input": "Click / Tap Play Again",
+      "input": "R / P / S (or 1 / 2 / 3)",
+      "action": "Choose rock, paper or scissors"
+    },
+    {
+      "input": "Play Again / Enter",
       "action": "Start the next round"
     },
     {
-      "input": "Click / Tap Rules",
-      "action": "Show which move beats which"
+      "input": "Rules / Esc",
+      "action": "Open or close the rules"
     }
   ],
   "tips": [
     "The house picks completely at random, so no move is better than another in the long run.",
     "Your score never drops below zero, so an early loss costs you nothing.",
-    "Set yourself a target, like reaching 10 points, to turn a random game into a real challenge.",
-    "Open the Rules panel if you ever forget which hand beats which."
+    "Chase your best streak: it only counts wins in a row, and a draw does not break it.",
+    "Open the Rules panel if you ever forget which hand beats which, or to reset your score and stats."
   ],
   "faq": [
     {
@@ -31,11 +35,15 @@
     },
     {
       "question": "Can I play on a phone or tablet?",
-      "answer": "Yes. The layout adapts to small screens and you simply tap the move you want."
+      "answer": "Yes. The layout adapts to any screen in portrait or landscape, and you simply tap the big token you want."
     },
     {
       "question": "Does the house cheat?",
-      "answer": "No. The house makes its choice at random before you pick, so every round is a fair game of chance. Your score resets when you reload the page."
+      "answer": "No. The house makes its choice at random before you pick, so every round is a fair game of chance."
+    },
+    {
+      "question": "Is my score saved?",
+      "answer": "Yes. Your score, wins, losses, draws and streaks are saved in your browser on this device. You can clear them with the Reset button in the Rules panel."
     }
   ],
   "category": "Casual",

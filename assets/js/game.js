@@ -1,252 +1,248 @@
-let move_selector = document.getElementById('move_selector');
-let g = document.getElementById('game');
-var score = 0;
-var playerChoice = 0;
-var houseChoice = 0;
-var playerLocked = 0;
+// Rock Paper Scissors
+// Pick a move, the house reveals its own (chosen at random before you pick),
+// win +1 point, lose -1 (never below zero), draw no change.
 
-gamePlayerSelect();
+(function () {
+	'use strict';
 
-function gamePlayerSelect(){
-	move_selector.innerHTML = '';
-	houseChoice = Math.floor(Math.random() * 3) + 1;
-	document.getElementById('score').innerText = score;
+	var PREFIX = 'sasso-carta-forbici:';
+	var MOVES = ['rock', 'paper', 'scissors'];
+	var BEATS = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
 
-	let joinTop = document.createElement('div');
-	joinTop.id = 'join_top';
-	move_selector.appendChild(joinTop);
+	// -------
+	// Storage
+	// -------
 
-	let joinLeft = document.createElement('div');
-	joinLeft.id = 'join_left';
-	move_selector.appendChild(joinLeft);
-
-	let joinRight = document.createElement('div');
-	joinRight.id = 'join_right';
-	move_selector.appendChild(joinRight);
-
-	let paper = document.createElement('i');
-	paper.className = 'icon icon_paper icon_paper_select icon-icon-paper';
-	paper.id = 'paper';
-	paper.addEventListener("click", function(){
-		if(playerLocked == 0){
-			this.removeEventListener('click', arguments.callee, false);
-			iconSelect('paper');
+	function load(key, fallback) {
+		try {
+			var v = localStorage.getItem(PREFIX + key);
+			return v === null ? fallback : JSON.parse(v);
+		} catch (e) {
+			return fallback;
 		}
-	});
-	move_selector.appendChild(paper);
-
-	let scissors = document.createElement('i');
-	scissors.className = 'icon icon_scissors icon_scissors_select icon-icon-scissors';
-	scissors.id = 'scissors';
-	scissors.addEventListener("click", function(){
-		if(playerLocked == 0){
-			iconSelect('scissors');
-			this.removeEventListener('click', arguments.callee, false);
-		}
-	});
-	move_selector.appendChild(scissors);
-
-	let rock = document.createElement('i');
-	rock.className = 'icon icon_rock icon_rock_select icon-icon-rock';
-	rock.id = 'rock';
-	rock.addEventListener("click", function(){
-		if(playerLocked == 0){
-			this.removeEventListener('click', arguments.callee, false);
-			iconSelect('rock');
-		}
-	});
-	move_selector.appendChild(rock);
-
-	let rules = document.createElement('span');
-	rules.id = 'btn_rules';
-	rules.addEventListener("click", function(){
-		showRules(move_selector);
-	});
-	rules.innerText = 'RULES';
-	move_selector.appendChild(rules);
-}
-
-function showRules(){
-	let shadowBox = document.createElement('div');
-	shadowBox.id = 'shadow_box';
-	move_selector.appendChild(shadowBox);
-
-	let rulesBlock = document.createElement('div');
-	rulesBlock.id = 'rules_block';
-
-	let iconClose = document.createElement('i');
-	iconClose.className = 'icon-icon-close';
-	iconClose.addEventListener("click", function(){
-		shadowBox.remove();
-		rulesBlock.remove();
-	});
-	rulesBlock.appendChild(iconClose);
-
-	let rulesHead = document.createElement('div');
-	rulesHead.className = 'rules_head';
-	rulesHead.innerText = 'RULES';
-	rulesBlock.appendChild(rulesHead);
-	
-	let rulesImage = document.createElement('img');
-	rulesImage.src = './assets/images/image-rules.svg';
-	rulesImage.alt = 'Rules: paper beats rock, rock beats scissors, scissors beats paper';
-	rulesBlock.appendChild(rulesImage);	
-	
-	move_selector.appendChild(rulesBlock);
-}
-
-function iconSelect(type){
-	playerLocked = 1;
-	let joinTop = document.getElementById('join_top');
-	let joinLeft = document.getElementById('join_left');
-	let joinRight = document.getElementById('join_right');
-	let rock = document.getElementById('rock');
-	let paper = document.getElementById('paper');
-	let scissors = document.getElementById('scissors');
-	
-	let ppt = document.createElement('span');
-	ppt.id = 'player_pick_txt';
-	ppt.innerText = 'YOU PICKED';
-	move_selector.appendChild(ppt);
-
-	let houseEmpty = document.createElement('div');
-	houseEmpty.id = 'house_empty';
-	move_selector.appendChild(houseEmpty);
-	
-	let hpt = document.createElement('span');
-	hpt.id = 'house_pick_txt';
-	hpt.innerText = 'THE HOUSE PICKED';
-	move_selector.appendChild(hpt);
-
-	if(joinTop){
-		joinTop.remove();
-		joinLeft.remove();
-		joinRight.remove();
 	}
-	
-	playerChoice = (type == 'rock')? 1 : ((type == 'paper')? 2 : 3);
-	if(window.innerWidth < 1365){
-		rock.style.cssText = (type == 'rock')? 'z-index:5;margin-top: 81px;margin-left:0;' : 'margin-top: 81px;margin-left:0;';
-		scissors.style.cssText = (type == 'scissors')? 'z-index:5;margin-top: 81px;margin-left:0;' : 'margin-top: 81px;margin-left:0;';
-	}else{
-		rock.style.cssText = (type == 'rock')? 'z-index:5;margin-top: 81px;margin-left:-100px;' : 'margin-top: 81px;margin-left:-100px;';
-		scissors.style.cssText = (type == 'scissors')? 'z-index:5;margin-top: 81px;margin-left:-100px;' : 'margin-top: 81px;margin-left:-100px;';
+
+	function save(key, value) {
+		try {
+			localStorage.setItem(PREFIX + key, JSON.stringify(value));
+		} catch (e) { /* storage unavailable */ }
 	}
-	paper.style.cssText = (type == 'paper')? 'z-index:5;' : '';
 
-	setTimeout(function(){
-		hpt.style.cssText = 'opacity:1';
-		ppt.style.cssText = 'opacity:1';
-		houseEmpty.style.cssText = 'opacity:1';
-	}, 250);
+	var blank = { score: 0, wins: 0, losses: 0, draws: 0, streak: 0, best: 0 };
+	var stats = Object.assign({}, blank, load('stats', {}));
 
-	setTimeout(function(){
-		if(type == 'rock'){
-			scissors.remove();
-			paper.remove();
-			if(window.innerWidth > 1364){
-				rock.style.cssText = 'padding: 62px 68px;font-size: 109px;margin-top: 135px;margin-left: -211px;';
+	// --------
+	// Elements
+	// --------
+
+	var $ = function (id) { return document.getElementById(id); };
+	var pickEl = $('pick');
+	var duelEl = $('duel');
+	var playerSlot = $('player-slot');
+	var houseSlot = $('house-slot');
+	var resultEl = $('result');
+	var resultMsg = $('result-msg');
+	var againBtn = $('btn-again');
+	var scoreEl = $('score');
+	var rulesEl = $('rules');
+	var rulesBtn = $('btn-rules');
+	var resetBtn = $('btn-reset');
+
+	var state = 'pick'; // pick | reveal | result
+	var houseChoice = null;
+	var timers = [];
+	var resetArmed = false;
+
+	function later(fn, ms) {
+		timers.push(setTimeout(fn, ms));
+	}
+
+	function clearTimers() {
+		timers.forEach(clearTimeout);
+		timers = [];
+	}
+
+	function makeToken(move) {
+		var el = document.createElement('div');
+		el.className = 'token token-' + move;
+		el.setAttribute('role', 'img');
+		el.setAttribute('aria-label', move.charAt(0).toUpperCase() + move.slice(1));
+		var i = document.createElement('i');
+		i.className = 'icon-icon-' + move;
+		el.appendChild(i);
+		return el;
+	}
+
+	function renderStats() {
+		scoreEl.textContent = stats.score;
+		$('stat-wins').textContent = stats.wins;
+		$('stat-losses').textContent = stats.losses;
+		$('stat-draws').textContent = stats.draws;
+		$('stat-streak').textContent = stats.streak;
+		$('stat-best').textContent = stats.best;
+	}
+
+	// ----------
+	// Game flow
+	// ----------
+
+	function newRound() {
+		clearTimers();
+		state = 'pick';
+		houseChoice = MOVES[Math.floor(Math.random() * 3)];
+		duelEl.hidden = true;
+		pickEl.hidden = false;
+		resultEl.classList.remove('done');
+		document.querySelectorAll('.side').forEach(function (s) { s.classList.remove('winner'); });
+	}
+
+	function choose(move) {
+		if (state !== 'pick' || isRulesOpen()) return;
+		state = 'reveal';
+
+		pickEl.hidden = true;
+		duelEl.hidden = false;
+		playerSlot.innerHTML = '';
+		playerSlot.appendChild(makeToken(move));
+		houseSlot.innerHTML = '';
+		houseSlot.className = 'slot empty';
+		resultMsg.textContent = '';
+		resultMsg.className = 'result-msg';
+		resultEl.classList.remove('done');
+
+		// Short "thinking" shuffle before the house reveals its pick
+		var n = 0;
+		later(function shuffle() {
+			houseSlot.className = 'slot shuffling';
+			houseSlot.innerHTML = '';
+			houseSlot.appendChild(makeToken(MOVES[n % 3]));
+			n++;
+			if (n < 7) later(shuffle, 90);
+			else later(function () { reveal(move); }, 90);
+		}, 450);
+	}
+
+	function reveal(move) {
+		houseSlot.className = 'slot';
+		houseSlot.innerHTML = '';
+		houseSlot.appendChild(makeToken(houseChoice));
+
+		var outcome = move === houseChoice ? 'draw' : (BEATS[move] === houseChoice ? 'win' : 'lose');
+
+		later(function () {
+			if (outcome === 'win') {
+				stats.score++;
+				stats.wins++;
+				stats.streak++;
+				stats.best = Math.max(stats.best, stats.streak);
+				document.querySelector('.side-player').classList.add('winner');
+			} else if (outcome === 'lose') {
+				if (stats.score > 0) stats.score--;
+				stats.losses++;
+				stats.streak = 0;
+				document.querySelector('.side-house').classList.add('winner');
+			} else {
+				stats.draws++;
 			}
-		}
-		if(type == 'paper'){
-			scissors.remove();
-			rock.remove();
-			if(window.innerWidth > 1364){
-				paper.style.cssText = 'padding: 62px 75px;font-size: 109px;margin-top: 135px;margin-left: -211px;';
-			}
-		}
-		if(type == 'scissors'){
-			paper.remove();
-			rock.remove();
-			if(window.innerWidth > 1364){
-				scissors.style.cssText = 'padding: 62px 75px;font-size: 109px;margin-top: 135px;margin-left: -211px;';
-			}
-		}
-		
-		playerLocked = 0;
-	}, 1050);
+			save('stats', stats);
+			renderStats();
+			scoreEl.classList.remove('bump');
+			void scoreEl.offsetWidth;
+			if (outcome !== 'draw') scoreEl.classList.add('bump');
 
-	setTimeout(function(){
-		selectionRoll(paper, rock, scissors, type);
-	}, 1750);
-}
+			resultMsg.textContent = outcome === 'win' ? 'You win' : (outcome === 'lose' ? 'You lose' : 'Draw');
+			resultMsg.className = 'result-msg ' + outcome;
+			resultEl.classList.add('done');
+			state = 'result';
+			againBtn.focus({ preventScroll: true });
+		}, 350);
+	}
 
-function selectionRoll(p, r, s, type){
-	let houseEmpty = document.getElementById('house_empty');
-	let a = playerChoice.toString();
-	let b = houseChoice.toString();
-	let c = a + b;
-	setTimeout(function(){
-		houseEmpty.remove();
-		let classAtt = (houseChoice == 1)? 'icon_rock icon-icon-rock' : ((houseChoice == 2)? 'icon_paper icon-icon-paper' : 'icon_scissors icon-icon-scissors');
-		let icon = document.createElement('i');
-		icon.className = 'house_icon ' + classAtt;
-		icon.id = 'house_full';
-		
-		if(window.innerWidth < 1365){
-			icon.style.cssText = (houseChoice == 1)? 'padding: 25px 27px !important;font-size: 44px !important;' : '';
-			move_selector.appendChild(icon);
-		}else{
-			move_selector.appendChild(icon);
-			icon.style.cssText = (houseChoice == 1)? 'padding: 62px 68px !important;font-size: 109px !important;margin-left: 331px !important;' : 'margin-left: 331px !important;';
-			p.style.cssText = (type == 'paper')? 'padding: 62px 75px;font-size: 109px;margin-top: 135px;margin-left: -295px;' : '';
-			r.style.cssText = (type == 'rock')? 'padding: 62px 68px;font-size: 109px;margin-top: 135px;margin-left: -295px;' : '';
-			s.style.cssText = (type == 'scissors')? 'padding: 62px 75px;font-size: 109px;margin-top: 135px;margin-left: -295px;' : '';
-			document.getElementById('player_pick_txt').style.cssText = 'margin-left: -204px;opacity:1';
-			document.getElementById('house_pick_txt').style.cssText = 'margin-left: 380px;opacity:1';
+	// -----
+	// Rules
+	// -----
+
+	var lastFocus = null;
+
+	function isRulesOpen() {
+		return !rulesEl.hidden;
+	}
+
+	function openRules() {
+		lastFocus = document.activeElement;
+		rulesEl.hidden = false;
+		disarmReset();
+		rulesEl.querySelector('.btn-close').focus({ preventScroll: true });
+	}
+
+	function closeRules() {
+		rulesEl.hidden = true;
+		disarmReset();
+		if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+	}
+
+	function disarmReset() {
+		resetArmed = false;
+		resetBtn.classList.remove('confirm');
+		resetBtn.textContent = 'Reset score & stats';
+	}
+
+	resetBtn.addEventListener('click', function () {
+		if (!resetArmed) {
+			resetArmed = true;
+			resetBtn.classList.add('confirm');
+			resetBtn.textContent = 'Tap again to confirm';
+			return;
 		}
-		
-		
-		if(c == 13 || c == 21 || c == 32){
-			showResult('w');
-			if(window.innerWidth > 1364){
-				p.style.cssText = (type == 'paper')? 'padding: 62px 75px;font-size: 109px;margin-top: 135px;margin-left: -295px;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 8px 2px rgba(0,0,0,0.3);' : '';
-				r.style.cssText = (type == 'rock')? 'padding: 62px 68px;font-size: 109px;margin-top: 135px;margin-left: -295px;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 8px 2px rgba(0,0,0,0.3);' : '';
-				s.style.cssText = (type == 'scissors')? 'padding: 62px 75px;font-size: 109px;margin-top: 135px;margin-left: -295px;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 8px 2px rgba(0,0,0,0.3);' : '';
-			}else{
-				p.style.cssText = (type == 'paper')? 'margin-top: 81px;margin-left:0;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 4px 5px rgba(0,0,0,0.3);' : '';
-				r.style.cssText = (type == 'rock')? 'margin-top: 81px;margin-left:0;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 4px 5px rgba(0,0,0,0.3);' : '';
-				s.style.cssText = (type == 'scissors')? 'margin-top: 81px;margin-left:0;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 4px 5px rgba(0,0,0,0.3);' : '';
-			}
-		}
-		
-		else if(c == 31 || c == 12 || c == 23){
-			showResult('l');
-			if(window.innerWidth > 1364){
-				icon.style.cssText = (houseChoice == 1)? 'padding: 62px 68px !important;font-size: 109px !important;margin-left: 331px !important;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 8px 2px rgba(0,0,0,0.3);' : 'padding: 62px 68px !important;font-size: 109px !important;margin-left: 331px !important;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 8px 2px rgba(0,0,0,0.3);';
-			}else{
-				icon.style.cssText = (houseChoice == 1)? 'padding: 25px 27px !important;font-size: 44px !important;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 4px 5px rgba(0,0,0,0.3);' : 'padding: 25px 27px !important;font-size: 44px !important;box-shadow: 0 0 0 48px rgba(255,255,255,0.05), 0 0 0 96px rgba(255,255,255,0.04), inset 0px 4px 5px rgba(0,0,0,0.3);';
-			}
-		}
-
-		else if(c == 11 || c == 22 || c == 33){
-			showResult('d');
-		}
-	}, 500);
-}
-
-function showResult(type){
-	score = (type == 'w')? score + 1 : ((type == 'l' && score != 0)? score - 1 : score);
-	document.getElementById('score').innerText = score;
-	let msg = (type == 'w')? 'YOU WIN' : ((type == 'l')? 'YOU LOSE' : 'DRAW');
-	let resultBlock = document.createElement('div');
-	resultBlock.className = 'result_block';
-
-	let resultMessage = document.createElement('span');
-	resultMessage.className = 'result_message';
-	resultMessage.innerText = msg;
-	resultBlock.appendChild(resultMessage);
-
-	let extraSpace = document.createElement('p');
-	extraSpace.className = 'extra_space';
-	let btnPlayAgain = document.createElement('span');
-	btnPlayAgain.className = 'btn_play_again';
-	btnPlayAgain.innerText = 'PLAY AGAIN';
-	btnPlayAgain.addEventListener("click", function(){
-		gamePlayerSelect();
+		stats = Object.assign({}, blank);
+		save('stats', stats);
+		renderStats();
+		resetBtn.textContent = 'Stats cleared';
+		resetArmed = false;
+		resetBtn.classList.remove('confirm');
 	});
 
-	extraSpace.appendChild(btnPlayAgain);
-	resultBlock.appendChild(extraSpace);
-	move_selector.appendChild(resultBlock);
-}
+	rulesBtn.addEventListener('click', openRules);
+	rulesEl.addEventListener('click', function (e) {
+		if (e.target.closest('[data-close]')) closeRules();
+	});
+
+	// ------
+	// Input
+	// ------
+
+	pickEl.addEventListener('click', function (e) {
+		var btn = e.target.closest('[data-move]');
+		if (btn) choose(btn.getAttribute('data-move'));
+	});
+
+	againBtn.addEventListener('click', function () {
+		if (state === 'result') newRound();
+	});
+
+	var KEY_MOVES = { r: 'rock', p: 'paper', s: 'scissors', '1': 'rock', '2': 'paper', '3': 'scissors' };
+
+	window.addEventListener('keydown', function (e) {
+		if (e.ctrlKey || e.metaKey || e.altKey) return;
+		var k = e.key.toLowerCase();
+		if (isRulesOpen()) {
+			if (k === 'escape') { e.preventDefault(); closeRules(); }
+			return;
+		}
+		if (state === 'pick' && KEY_MOVES[k]) {
+			e.preventDefault();
+			choose(KEY_MOVES[k]);
+		} else if (state === 'result' && (k === 'enter' || k === ' ' || KEY_MOVES[k])) {
+			e.preventDefault();
+			newRound();
+			if (KEY_MOVES[k]) choose(KEY_MOVES[k]);
+		} else if (k === 'h' || k === '?') {
+			openRules();
+		}
+	});
+
+	window.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+
+	renderStats();
+	newRound();
+})();
