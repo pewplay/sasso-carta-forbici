@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 	<title>Rock Paper Scissors</title>
 	<meta name="description" content="Play Rock, Paper, Scissors against the house.">
 	<meta name="author" content="ozboware">
@@ -10,23 +10,69 @@
 	<link rel="icon" href="./assets/images/thumb.png" type="image/png" sizes="32x32">
 </head>
 <body>
-	<div id="game">
-		<div class="head">
-			<div class="head_title">
-				ROCK<br>PAPER<br>SCISSORS
+	<div class="app" id="app">
+		<header class="head">
+			<h1 class="head-title">Rock<br>Paper<br>Scissors</h1>
+			<div class="score-box" aria-live="polite">
+				<span class="score-label">Score</span>
+				<span class="score-value" id="score">0</span>
 			</div>
-			
-			<div class="score_wrapper">
-				<div class="score_content">
-					<span class="score_head">SCORE</span><br>
-					<span id="score">0</span>
+		</header>
+
+		<ul class="stats" aria-label="Statistics">
+			<li><span class="stat-label">Wins</span> <b id="stat-wins">0</b></li>
+			<li><span class="stat-label">Losses</span> <b id="stat-losses">0</b></li>
+			<li><span class="stat-label">Draws</span> <b id="stat-draws">0</b></li>
+			<li><span class="stat-label">Streak</span> <b id="stat-streak">0</b></li>
+			<li><span class="stat-label">Best</span> <b id="stat-best">0</b></li>
+		</ul>
+
+		<main class="board" id="board">
+			<!-- Step 1: pick a move -->
+			<section class="pick" id="pick" aria-label="Choose your move">
+				<div class="triangle">
+					<svg class="triangle-lines" viewBox="0 0 290 255" aria-hidden="true" preserveAspectRatio="none">
+						<polygon points="50,50 240,50 145,205"></polygon>
+					</svg>
+					<button type="button" class="token token-paper" data-move="paper" aria-label="Paper (P)"><i class="icon-icon-paper"></i></button>
+					<button type="button" class="token token-scissors" data-move="scissors" aria-label="Scissors (S)"><i class="icon-icon-scissors"></i></button>
+					<button type="button" class="token token-rock" data-move="rock" aria-label="Rock (R)"><i class="icon-icon-rock"></i></button>
 				</div>
+			</section>
+
+			<!-- Step 2: the duel -->
+			<section class="duel" id="duel" hidden>
+				<div class="side side-player">
+					<span class="side-label">You picked</span>
+					<div class="slot" id="player-slot"></div>
+				</div>
+				<div class="side side-house">
+					<span class="side-label">The house picked</span>
+					<div class="slot" id="house-slot"></div>
+				</div>
+				<div class="result" id="result" aria-live="polite">
+					<p class="result-msg" id="result-msg"></p>
+					<button type="button" class="btn btn-again" id="btn-again">Play again</button>
+				</div>
+			</section>
+		</main>
+
+		<footer class="foot">
+			<p class="keys-hint">Keys: R, P, S &middot; Enter to play again</p>
+			<button type="button" class="btn btn-rules" id="btn-rules">Rules</button>
+		</footer>
+	</div>
+
+	<div class="modal" id="rules" hidden>
+		<div class="modal-backdrop" data-close></div>
+		<div class="rules-block" role="dialog" aria-modal="true" aria-labelledby="rules-title">
+			<div class="rules-head">
+				<h2 id="rules-title">Rules</h2>
+				<button type="button" class="btn-close" data-close aria-label="Close rules"><i class="icon-icon-close"></i></button>
 			</div>
-
-		</div>
-
-		<div id="move_selector">
-			Rock Paper Scissors needs JavaScript to run.
+			<img class="rules-image" src="./assets/images/image-rules.svg" alt="Paper beats rock, rock beats scissors, scissors beats paper" draggable="false">
+			<p class="rules-text">Win: +1 point. Lose: &minus;1 point (never below zero). Draw: no change.</p>
+			<button type="button" class="btn btn-reset" id="btn-reset">Reset score &amp; stats</button>
 		</div>
 	</div>
 

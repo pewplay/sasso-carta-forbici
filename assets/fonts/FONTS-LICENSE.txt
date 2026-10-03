@@ -1,0 +1,5 @@
+Poppins (poppins-bold.woff, poppins-medium.woff, subset)
+Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins)
+Licensed under the SIL Open Font License, Version 1.1: https://openfontlicense.org
+
+icomoon (fonts.woff, fonts.ttf): game icon font from the original project.
